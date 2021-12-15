@@ -1,81 +1,53 @@
-import { Component } from 'react';
 import './App.css';
+import { Component } from 'react';
+import Product from './Components/Product';
 
 class App extends Component {
-  showInforProduct(product) {
-    if (product.status) {
-      return <h3>
-        id:{product.id} <br />
-        name:{product.name} <br />
-        price:{product.price} VND <br />
-        status: 'Active'
-      </h3>
-    } else {
-      return <h3>
-        id:{product.id} <br />
-        name:{product.name} <br />
-        price:{product.price} VND <br />
-        status: '_Pending'
-      </h3>
-    }
-  }
   render() {
-    var a = 5;
-    var b = 7;
-    var name = 'huyenmap';
-    var product = {
-      id: 1,
-      name: 'ip 7 plus',
-      price: 15000000,
-      status: true
-    };
-    var user = [
+    var Products = [
       {
         id: 1,
-        name: 'Nguyen Van A',
-        age: 18
+        name: 'apple ip 6s plus 16GB',
+        price: 15000000,
+        images: 'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/thumbnail/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone_6s_plus_2.jpg',
+        status: true
       },
       {
         id: 2,
-        name: 'Nguyen Van B',
-        age: 19
+        name: 'ss galaxy s7',
+        price: 15000000,
+        images: 'https://www.viettablet.com/images/detailed/26/samsung-galaxy-s7-edge-viettablet.png',
+        status: true
       },
       {
         id: 3,
-        name: 'Nguyen Van C',
-        age: 20
+        name: 'apple ip 6s plus 16GB',
+        price: 15000000,
+        images: 'https://cdn.tgdd.vn/Products/Images/42/89692/oppo-f1s-mau-den-org-den.png',
+        status: false
       }
     ];
     return (
       <div>
         <div className="btn-group" role="group" aria-label="Basic example">
-          <button type="button" className="btn btn-dark">Title</button>
-          <button type="button" className="btn btn-dark active">Home</button>
-          <button type="button" className="btn btn-dark">Link</button>
+          <button type="button" className="btn btn-dark">Props</button>
         </div>
-        <div className='ml-30'>
-          <h2>
-            a: {a} <br />
-            b: {b} <br />
-            a+b={a + b}
-          </h2>
-          <h3>{name}</h3>
-          {this.showInforProduct(product)}
-          <hr />
-          {user.map((user, index) => {
-            return <div key={user.id}>
-                     <h2>
-                      name: {user.name} <br />
-                      age: {user.age}
-                     </h2>
-                   </div>
-          })};
-          {/*<h3>
-            id:{product.id} <br />
-            name:{product.name} <br />
-            price:{product.price} VND <br />
-            status: {product.status? 'Active':'Pending'}
-          </h3>*/}
+        <div className='container'>
+          <div className='row'>
+            {Products.map((Products, index) => {
+              let result = ''
+              if (Products.status) {
+                return result = <Product
+                  key={Products.id}
+                  price={Products.price}
+                  images={Products.images}
+                >
+                  {Products.name}
+                </Product>
+              }
+              return result;
+            })};
+          </div>
         </div>
       </div>
     );
