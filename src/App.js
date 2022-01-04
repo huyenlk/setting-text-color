@@ -1,168 +1,117 @@
-import './App.css';
 import { Component } from 'react';
-import AddForm from './Components/AddForm';
-import AddButton from './Components/AddButton';
-import Search from './Components/Search';
-import Sort from './Components/Sort';
-import Task from './Components/Task';
-import {filter} from 'lodash';
+import './App.css';
+import ColorPicker from './Components/ColorPicker';
+import SizePicker from './Components/SizePicker';
+import Reset from './Components/Reset';
+import Content from './Components/Content';
+
 
 class App extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      status: false,
-      number: 2,
-      taskEditing: null,
-      sortName: '',
-      sortStt: 1,
-      tasks: [],
-      keyWord: ''
-    }
-
+      item: 'red',
+      size: 12,
+      padding: 4
+    };
   }
 
-  componentDidMount() {
-    if (localStorage && localStorage.getItem('tasks')) {
-      var tasks = JSON.parse(localStorage.getItem('tasks'));
-      const newTasks = tasks.filter((task) => task)
-      this.setState({
-        tasks: newTasks
-      });
-    }
-  }
-
-
-  onOpenForm = (status) => {
-    if (status === true) {
-      this.setState({
-        status: false
-      })
-    } else {
-      this.setState({
-        status: true
-      })
-    }
-  }
-
-  onButtonX = (status) => {
-    if (status === true) {
-      this.setState({
-        status: false
-      })
-    } else {
-      this.setState({
-        status: true
-      })
-    }
-  }
-
-  onAddTask = (data) => {
-    var { tasks } = this.state;
-    if (!data.id) {
-      var number = this.state.number + 1;
-      data.id = number + 1
-      this.setState({
-        number: number,
-      })
-      tasks.push(data);
-    } else {
-      tasks[this.state.index] = data
-    }
+  onSelectColor = (item) => {
     this.setState({
-      tasks: tasks,
-    });
-    localStorage.setItem('tasks', JSON.stringify(tasks))
-  }
-
-  onHandleSubmit = (keyWord) => {
-    console.log(keyWord)
-  }
-
-  onFix = (index) => {
-    this.onOpenForm(this.state.status);
-    var { tasks } = this.state;
-    var taskEditing = tasks[index];
-    this.setState({
-      taskEditing: taskEditing,
-      index: index
+      item,
     })
   }
 
-  onSort = (sortName, sortStt) => {
-    this.setState({
-      sortName: sortName,
-      sortStt: sortStt
-    })
-    if (sortName === 'name') {
-      this.state.tasks.sort((a, b) => {
-        if (a.name > b.name) return sortStt;
-        else if (a.name < b.name) return -sortStt;
-        else return 0;
-      });
-    } else {
-      this.state.tasks.sort((a, b) => {
-        if (a.pound > b.pound) return -sortStt;
-        else if (a.pound < b.pound) return sortStt;
-        else return 0;
-      });
+  onDown = (size, padding) => {
+    if (size > 12) {
+      this.setState({
+        size: size - 1,
+        padding: padding - 1
+      })
     }
-    console.log(sortName, sortStt)
+
   }
 
-  onSearch = (keyWord) => {
+  onUp = (size, padding) => {
+    if (size < 36) {
+      this.setState({
+        size: size + 1,
+        padding: padding + 1
+      })
+    }
+  }
+
+  onReset = () => {
     this.setState({
-      keyWord: keyWord
+      size: 12,
+      padding: 4,
+      item: 'red'
     })
   }
+
 
   render() {
-    var { tasks } = this.state;
-    let newValue = tasks
-    if (this.state.keyWord) {
-     newValue=filter(tasks,(task)=>{
-       return task.name.toLowerCase().indexOf(this.state.keyWord) !== -1;
-     })
-      console.log(newValue)
-    }
+    var Colors = [
+      {
+        id: 1,
+        item: 'red'
+      },
+      {
+        id: 2,
+        item: 'green'
+      },
+      {
+        id: 3,
+        item: 'blue'
+      },
+      {
+        id: 4,
+        item: 'grey'
+      },
+    ];
     return (
-      <div className='col-md-8 col-sm-8 col-xs-8 col-lg-8' style={{ marginLeft: 200 }}>
-        <h3 style={{ textAlign: 'center' }}>
-          QUAN LY CONG VIEC</h3>
-        <hr />
+      <div className="marginAllPAge">
         <div className="row">
-          <div className={this.state.status === true ? 'col-md-4 col-sm-4 col-xs-4 col-lg-4' : ''}>
-            {this.state.status === true ? <AddForm taskEditing={this.state.taskEditing} onAddTask={this.onAddTask} status={this.state.status} onButtonX={this.onButtonX} /> : ''}
-          </div>
-          <div className="col">
-            <div className="row row-cols-1">
-              <AddButton
-                status={this.state.status}
-                onOpenForm={this.onOpenForm}
-              />
-              <div className="col">
-                <div className="row">
-                  <Search
-                    onSearch={this.onSearch}
-                  />
-                  <Sort
-                    onSort={this.onSort}
-                    sortName={this.state.sortName}
-                    sortStt={this.state.sortStt}
-                  />
-                </div>
+          <div className="col-md-5 col-sm-5 col-lg-5 col-xs-5">
+            <div className="card">
+              <div className="card-header">
+                Color Picker
               </div>
-              <Task
-                onSave={this.onSave}
-                onFix={this.onFix}
-                tasks={this.state.tasks}
-                newValue={newValue}
-                keyWord={this.state.keyWord}
-              />
+              <div className="card-body">
+                {Colors.map((Color, index) => {
+                  return <ColorPicker
+                    key={index}
+                    item={Color.item}
+                    id={Color.id}
+                    onSelectColor={this.onSelectColor}
+                  />
+                })}
+                <hr />
+              </div>
             </div>
           </div>
+          <div className="col-md-5 col-sm-5 col-lg-5 col-xs-5">
+            <SizePicker
+              onDown={this.onDown}
+              onUp={this.onUp}
+              size={this.state.size}
+              padding={this.state.padding}
+            />
+            <Reset
+              onReset={this.onReset}
+              item={this.state.item}
+              size={this.state.size}
+              padding={this.state.padding}
+            />
+          </div>
         </div>
+        &nbsp;
+        <Content
+          item={this.state.item}
+          size={this.state.size}
+          padding={this.state.padding}
+        />
       </div>
     );
   }
